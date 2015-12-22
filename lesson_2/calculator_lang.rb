@@ -6,6 +6,7 @@ require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages_lang.yml')
 #puts MESSAGES.inspect
 
+LANGUAGE = 'en'
 def prompt(message)
   Kernel.puts("=> #{message}")
 end
@@ -18,7 +19,7 @@ def messages(message, lang='es')
   MESSAGES[lang][message]
 end
 
-prompt(messages('welcome','es'))
+prompt(messages('welcome',LANGUAGE))
 
 
 prompt(MESSAGES['es']['valid_name'])
