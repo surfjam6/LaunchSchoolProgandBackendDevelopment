@@ -8,10 +8,10 @@ def prompt(message)
   Kernel.puts("=> #{message}")
 end
 
-def valid_integer?(num)
+def valid_number?(num)
   (num.to_f.to_s == num) || (num.to_i.to_s == num)
 end
-
+##tr sub, gsub methods
 prompt(MESSAGES['welcome'])
 
 name = ''
@@ -29,7 +29,7 @@ loop do # main
   loop do
     prompt(MESSAGES['first_number'])
     number1 = gets().chomp()
-    if valid_integer?(number1)
+    if valid_number?(number1)
       break
     else
       prompt(MESSAGES['valid_number'])
@@ -41,7 +41,7 @@ loop do # main
   loop do
     prompt(MESSAGES['second_number'])
     number2 = gets().chomp()
-    if valid_integer?(number2)
+    if valid_number?(number2)
       break
     else
       prompt(MESSAGES['valid_number'])
