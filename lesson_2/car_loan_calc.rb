@@ -16,8 +16,6 @@ end
 
 # Method to check for valid loan amount input :
 def valid_loan_amount?(num)
-  num.tr! '$', '' if num.include? '$'
-  num.tr! ',', '' if num.include? ','
   # Handles input as a float num.0, dollar amount $num.00 or integer:
   # "&&" tests for positive number:
   ((num.to_f.to_s == num) || (num.to_f.to_s + '0' == num) || (num.to_i.to_s == num)) && (num.to_f >= 0 || num.to_i >= 0)
@@ -32,6 +30,8 @@ loop do # main
   loop do
     prompt('Welcome to loan calculator, please enter loan amount (dollars):')
     loan_amount = gets.chomp
+    loan_amount.tr! '$', '' if loan_amount.include? '$'
+    loan_amount.tr! ',', '' if loan_amount.include? ','
     if valid_loan_amount?(loan_amount)
       loan_amount = loan_amount.to_f
       break
@@ -49,7 +49,7 @@ loop do # main
       annual_percentage_rate = annual_percentage_rate.chop!
     end
     if valid_number?(annual_percentage_rate)
-      monthly_interest_rate = annual_percentage_rate.to_f/1200
+      monthly_interest_rate = annual_percentage_rate.to_f / 1200
       puts "Monthly interest rate = #{monthly_interest_rate}"
       break
     else puts "Please enter valid interest rate percentage:"
