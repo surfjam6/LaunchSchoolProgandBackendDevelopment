@@ -62,9 +62,9 @@ loop do # main
     loan_duration = gets.chomp
     if valid_number?(loan_duration)
       loan_duration = loan_duration.to_i * 12
-      puts "The loan_duration is #{loan_duration} months"
+      prompt("The loan_duration is #{loan_duration} months")
       payment = calc_payment(monthly_interest_rate, loan_amount, loan_duration)
-      puts "Your payment would be: $#{payment.round(2)}"
+      prompt("Your payment would be: $#{format('%02.2f', payment)}")
       break
     else puts "Please enter valid loan length:"
     end
