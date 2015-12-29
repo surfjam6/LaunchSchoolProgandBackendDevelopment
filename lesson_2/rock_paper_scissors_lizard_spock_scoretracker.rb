@@ -20,7 +20,7 @@ def return_win?(user, computer)
   (user == 'lizard' && computer == 'paper')
 end
 
-def display_result(user,computer)
+def display_result(user, computer)
   if return_win?(user, computer)
     prompt("You won!")
   elsif return_win?(computer, user)
@@ -40,7 +40,7 @@ computer_count = 0
 loop do # main
   user_choice = ''
   loop do
-  prompt("Please choose one -> rock (or r), paper (or p), scissors (or sc), \n lizard (or l), spock (or sp):")
+    prompt("Please choose one -> rock (or r), paper (or p), scissors (or sc), \n lizard (or l), spock (or sp):")
     user_choice = gets.chomp.downcase
     # Check to see if you have a valid shortcut (key) and then fetch the assoc value:
     if VALID_RESPONSES.include?(VALID_SHORTCUTS.fetch(user_choice, "not valid"))
@@ -79,7 +79,7 @@ loop do # main
   else
     prompt("Tie!")
   end
- 
+
   prompt("Do you want to play again? (y)")
   break unless gets.chomp.downcase.start_with?('y')
 end
