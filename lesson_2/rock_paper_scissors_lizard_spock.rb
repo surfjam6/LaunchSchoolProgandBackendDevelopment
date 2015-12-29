@@ -30,10 +30,16 @@ end
 prompt("Welcome to the rock, paper, scissors, lizard, spock game.")
 loop do # main
 
+  valid_shortcuts = {'r' => 'rock', 'p' => 'paper', 'sc' => 'scissors', 'l' => 'lizard', 'sp' => 'spock'}
   user_choice = ''
   loop do
-    prompt("Please choose one (rock, paper, scissors, lizard, spock):")
+    prompt("Please choose one -> rock (or r), paper (or p), scissors (or sc), \n lizard (or l), spock (or sp):")
     user_choice = gets.chomp.downcase
+    # Check to see if you have a valid shortcut (key) and then fetch the assoc value:
+    if VALID_RESPONSES.include?(valid_shortcuts.fetch(user_choice, "not valid"))
+      user_choice = valid_shortcuts.fetch(user_choice, "not valid")
+    end
+
     if VALID_RESPONSES.include?(user_choice)
       break
     else
