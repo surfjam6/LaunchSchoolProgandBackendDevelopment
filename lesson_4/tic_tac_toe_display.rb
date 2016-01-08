@@ -5,10 +5,11 @@ EMPTY_SQUARE_MARKER = ' '
 USER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
 
-def prompt (message)
+def prompt(message)
   puts "=> #{message}"
 end
 
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 def display_board(brd)
   system "clear"
   puts ""
@@ -26,15 +27,16 @@ def display_board(brd)
   puts "     |     |"
   puts ""
 end
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
 def initialize_board
   new_board = {}
-  (1..9).each {|mark| new_board[mark] = EMPTY_SQUARE_MARKER}
+  (1..9).each { |mark| new_board[mark] = EMPTY_SQUARE_MARKER }
   new_board
 end
 
 def empty_squares(brd)
-  brd.keys.select {|num| brd[num] == EMPTY_SQUARE_MARKER}
+  brd.keys.select { |num| brd[num] == EMPTY_SQUARE_MARKER }
 end
 
 def display_result(winner)
@@ -55,7 +57,7 @@ def board_full?(brd, won)
 end
 
 def good_user_entry!(brd, entry)
-  if !brd.has_key?(entry)
+  if !brd.key?(entry)
     prompt("Incorrect entry, please re-enter")
   elsif brd[entry] != EMPTY_SQUARE_MARKER
     prompt("Illegal entry, box previously selected, please re-enter")
@@ -66,7 +68,7 @@ end
 
 def enter_user_choice(brd)
   loop do # user choice:
-    prompt ("Please choose a location to place \"X\" from (#{empty_squares(brd).join(", ")}):")
+    prompt "Please choose a location to place \"X\" from (#{empty_squares(brd).join(', ')}):"
     user_choice = gets.chomp.to_i
     break if good_user_entry!(brd, user_choice)
   end
@@ -77,16 +79,16 @@ def computer_entry!(brd)
   brd[computer_entry] = COMPUTER_MARKER
 end
 
-def return_winner(brd, marker) 
-  win = (brd[1] == marker && brd[2] == marker && brd[3] == marker) ||
-  (brd[4] == marker && brd[5] == marker && brd[6] == marker) ||
-  (brd[7] == marker && brd[8] == marker && brd[9] == marker) ||
-  (brd[1] == marker && brd[4] == marker && brd[7] == marker) ||
-  (brd[2] == marker && brd[5] == marker && brd[8] == marker) ||
-  (brd[3] == marker && brd[6] == marker && brd[9] == marker) ||
-  (brd[1] == marker && brd[5] == marker && brd[9] == marker) ||
-  (brd[3] == marker && brd[5] == marker && brd[7] == marker)
-  if win 
+def return_winner(brd, marker)
+  win = brd.values_at(1, 2, 3).count(marker) == 3 ||
+        brd.values_at(4, 5, 6).count(marker) == 3 ||
+        brd.values_at(7, 8, 9).count(marker) == 3 ||
+        brd.values_at(1, 4, 7).count(marker) == 3 ||
+        brd.values_at(2, 5, 8).count(marker) == 3 ||
+        brd.values_at(3, 6, 9).count(marker) == 3 ||
+        brd.values_at(1, 5, 9).count(marker) == 3 ||
+        brd.values_at(3, 5, 7).count(marker) == 3
+  if win
     display_result(marker)
   end
   return win
@@ -94,30 +96,29 @@ end
 
 winner = ''
 board = initialize_board
-user_choice = ''
-board_numbers = {1=>"1", 2=>"2", 3=>"3", 4=>"4", 5=>"5", 6=>"6", 7=>"7", 8=>"8", 9=>"9"}
+board_numbers = { 1 => "1", 2 => "2", 3 => "3", 4 => "4", 5 => "5", 6 => "6", 7 => "7", 8 => "8", 9 => "9" }
 display_board(board_numbers)
 loop do # main
   # User play:
   enter_user_choice(board)
   display_board(board)
   winner = return_winner(board, USER_MARKER)
-# Note: if you choose to play again, computer will go first.
+  # Note: if you choose to play again, computer will go first.
   if board_full?(board, winner) || winner == true
-    ##   detect winner and print message
+  ## detect winner and print message
     prompt("Would you like to play again? (Y/N)")
     end_game = gets.chomp
     break if end_game.downcase != 'y'
     board = initialize_board
   end
-  
+
   # Computer play:
   computer_entry!(board)
   display_board(board)
   winner = return_winner(board, COMPUTER_MARKER)
-# Note: if you choose to play again, user will go first.
+  # Note: if you choose to play again, user will go first.
   if board_full?(board, winner) || winner == true
-    ##   detect winner and print message
+  ## detect winner and print message
     prompt("Would you like to play again? (Y/N)")
     end_game = gets.chomp
     break if end_game.downcase != 'y'
