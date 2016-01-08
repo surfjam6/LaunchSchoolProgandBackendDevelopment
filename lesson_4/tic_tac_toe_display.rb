@@ -27,6 +27,9 @@ def initialize_board
   new_board
 end
 
+def empty_squares(brd)
+  brd.keys.select {|num| brd[num] == ' '}
+end
 def board_full?(brd)
     if !brd.has_value?(' ')  # board has no blanks
       display_board(brd)
@@ -49,7 +52,7 @@ end
 
 def enter_user_choice(brd)
   loop do # user choice:
-    prompt ("Please enter your choice to place an \"X\" from 1-9:")
+    prompt ("Please choose a location to place \"X\" from (#{empty_squares(brd).join(", ")}):")
     user_choice = gets.chomp.to_i
     break if good_user_entry?(brd, user_choice)
   end
