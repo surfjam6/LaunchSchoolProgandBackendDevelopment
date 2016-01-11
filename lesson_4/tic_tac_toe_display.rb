@@ -35,6 +35,11 @@ def initialize_board
   new_board
 end
 
+def joinor(input, delimiter, word = 'or')
+  input[input.index(input.last)] = "#{word} #{input.last}"  
+  input.join(delimiter)
+end
+
 def empty_squares(brd)
   brd.keys.select { |num| brd[num] == EMPTY_SQUARE_MARKER }
 end
@@ -68,7 +73,7 @@ end
 
 def enter_user_choice(brd)
   loop do # user choice:
-    prompt "Please choose a location to place \"X\" from (#{empty_squares(brd).join(', ')}):"
+    prompt "Please choose a location to place \"X\" at (#{joinor(empty_squares(brd), ', ')}):"
     user_choice = gets.chomp.to_i
     break if good_user_entry!(brd, user_choice)
   end
