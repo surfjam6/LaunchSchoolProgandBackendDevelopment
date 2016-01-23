@@ -50,7 +50,7 @@ def empty_squares?(brd)
 end
 
 def board_empty?(brd)
-  brd.values_at(1, 2, 3, 4, 5, 6, 7, 8, 9).count(EMPTY_SQUARE_MARKER) == 9
+  brd.values.count(EMPTY_SQUARE_MARKER) == 9
 end
 
 def display_result(winner)
