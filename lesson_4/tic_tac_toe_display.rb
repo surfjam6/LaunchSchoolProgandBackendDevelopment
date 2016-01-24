@@ -134,14 +134,14 @@ def computer_entry!(brd)
 end
 
 def return_winner(brd, marker)
-  win = brd.values_at(1, 2, 3).count(marker) == 3 ||
-        brd.values_at(4, 5, 6).count(marker) == 3 ||
-        brd.values_at(7, 8, 9).count(marker) == 3 ||
-        brd.values_at(1, 4, 7).count(marker) == 3 ||
-        brd.values_at(2, 5, 8).count(marker) == 3 ||
-        brd.values_at(3, 6, 9).count(marker) == 3 ||
-        brd.values_at(1, 5, 9).count(marker) == 3 ||
-        brd.values_at(3, 5, 7).count(marker) == 3
+  brd.values_at(1, 2, 3).count(marker) == 3 ||
+  brd.values_at(4, 5, 6).count(marker) == 3 ||
+  brd.values_at(7, 8, 9).count(marker) == 3 ||
+  brd.values_at(1, 4, 7).count(marker) == 3 ||
+  brd.values_at(2, 5, 8).count(marker) == 3 ||
+  brd.values_at(3, 6, 9).count(marker) == 3 ||
+  brd.values_at(1, 5, 9).count(marker) == 3 ||
+  brd.values_at(3, 5, 7).count(marker) == 3
 end
 
 def win_display_board(win, marker)
