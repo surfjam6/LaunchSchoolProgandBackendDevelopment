@@ -63,10 +63,13 @@ def display_result(winner)
   end
 end
 
-def board_full?(brd, won)
-  if empty_squares?(brd).empty? && won != true # Tie condition
+def board_full?(brd)
+  empty_squares?(brd).empty?
+end
+
+def tie_display_board(brd, won)
+  if won != true
     display_result('board_full')
-    return true
   end
 end
 
@@ -82,7 +85,7 @@ end
 
 def enter_user_choice(brd)
   loop do # user choice:
-    prompt "Please choose a location to place \"X\" at (#{joinor(empty_squares?(brd), ', ')}):"
+    prompt %{Please choose a location to place 'X' at (#{joinor(empty_squares?(brd), ', ')}):}
     user_choice = gets.chomp.to_i
     break if good_user_entry!(brd, user_choice)
   end
@@ -118,15 +121,12 @@ end
 def computer_entry!(brd)
   keep_move = detect_possible_moves(brd, COMPUTER_MARKER) # find winning move
   if keep_move != []
-    # debug   puts "Not Random -> Offense"
     brd[keep_move[0]] = COMPUTER_MARKER
   else 
     keep_move = detect_possible_moves(brd, USER_MARKER) # find defensive move
     if keep_move != []
-      # debug     puts "Not Random -> Defense"
       brd[keep_move[0]] = COMPUTER_MARKER
     else
-      # debug     puts "Random move"
       computer_entry = empty_squares?(brd).sample # random computer move
       brd[computer_entry] = COMPUTER_MARKER
     end
@@ -142,18 +142,20 @@ def return_winner(brd, marker)
         brd.values_at(3, 6, 9).count(marker) == 3 ||
         brd.values_at(1, 5, 9).count(marker) == 3 ||
         brd.values_at(3, 5, 7).count(marker) == 3
+end
+
+def win_display_board(win, marker)
   if win
     display_result(marker)
   end
-  return win
 end
 
 def keep_score(scorer, score_hash)
-  if scorer == 'User'
+#  if scorer == 'User'
     score_hash[scorer] += 1
-  elsif scorer == 'Computer'
-    score_hash[scorer] += 1
-  end
+#  elsif scorer == 'Computer'
+ #   score_hash[scorer] += 1
+#  end
   prompt "Score *** User: #{score_hash['User']} Computer: #{score_hash['Computer']} ***"
   if score_hash.value?(FINAL_SCORE)
     prompt "#{scorer} is the WINNER!!"
@@ -171,9 +173,11 @@ loop do # main
   enter_user_choice(board)
   display_board(board)
   winner = return_winner(board, USER_MARKER)
-  keep_score('User', score_hash) if winner == true
+  keep_score('User', score_hash) if winner
   # Note: if you choose to play again, Computer will go first.
-  if board_full?(board, winner) || winner == true
+  if board_full?(board) || winner
+    tie_display_board(board, winner)
+    win_display_board(winner, USER_MARKER)
     ## detect winner and print message:
     prompt("Would you like to play again? (Y/N)")
     end_game = gets.chomp
@@ -185,9 +189,11 @@ loop do # main
   computer_entry!(board)
   display_board(board)
   winner = return_winner(board, COMPUTER_MARKER)
-  keep_score('Computer', score_hash) if winner == true
+  keep_score('Computer', score_hash) if winner
   # Note: if you choose to play again, User will go first.
-  if board_full?(board, winner) || winner == true
+  if board_full?(board) || winner
+    tie_display_board(board, winner)
+    win_display_board(winner, COMPUTER_MARKER)
     ## detect winner and print message:
     prompt("Would you like to play again? (Y/N)")
     end_game = gets.chomp
