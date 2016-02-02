@@ -96,14 +96,19 @@ loop do # main
     display_card(dealer_hand, 'dealer')
     prompt("\n")
 
+answer = ''
   loop do #Player turn:
     player_sum = evaluate_hand(player_hand, 'player')
     if player_sum >= MAX_SCORE
       display_win_or_bust(player_sum, 'player')
       break
     end
-    prompt("hit or stay?")
-    answer = gets.chomp.downcase
+    loop do # check input/re-enter
+      prompt("(h)it or (s)tay?")
+      answer = gets.chomp.downcase
+      break if ['h', 's'].include?(answer)
+      prompt("Incorrect Entry, please re-enter")
+    end # check input/re-enter
     break if answer == 's' || (answer == 'stay')
     player_hand << pick_card(deck).to_a.flatten
     delete_from_deck(deck, player_hand)
@@ -137,4 +142,5 @@ loop do # main
   end
   break
 end # main
+prompt("Player sum = #{player_sum}, Dealer sum = #{dealer_sum}.")
 prompt("Goodbye!!")
