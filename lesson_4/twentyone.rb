@@ -135,10 +135,7 @@ loop do # main
     delete_from_deck(deck, dealer_hand)
     display_hand(dealer_hand, 'dealer')
     dealer_sum = evaluate_hand(dealer_hand, 'dealer')
-    if dealer_sum >= MAX_SCORE
-      display_win_or_bust(dealer_sum, 'dealer')
-      break
-    elsif dealer_sum > player_sum
+    if dealer_sum >= MAX_SCORE || dealer_sum > player_sum
       display_win_or_bust(dealer_sum, 'dealer')
       break
     end
