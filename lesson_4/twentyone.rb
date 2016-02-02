@@ -110,21 +110,16 @@ loop do # main
     display_hand(player_hand, 'player')
   end
 
-##player stay, compare hands
-# player_sum = evaluate_hand(player_hand, 'player')
+##player stay, compare player and dealer hands:
   dealer_sum = evaluate_hand(dealer_hand, 'dealer')
   if player_sum >= MAX_SCORE 
-    # Player has won or busted, game over or play again ?
+    # Player has won or busted, game over.
     break
-  elsif dealer_sum == MAX_SCORE 
+  elsif (dealer_sum == MAX_SCORE) || (dealer_sum > player_sum)
     #check for dealer win with initial two cards then game over
     # Dealer cannot bust with 2 cards
     display_hand(dealer_hand, 'dealer')
     display_win_or_bust(dealer_sum, 'dealer')
-    break
-  elsif player_sum < dealer_sum 
-    display_win_or_bust(dealer_sum, 'dealer')
-    display_hand(dealer_hand, 'dealer')
     break
   end
 
