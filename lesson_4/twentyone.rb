@@ -1,10 +1,5 @@
 # twentyone.rb
-
 SUIT = ["hearts","diamonds", "clubs", "spades"]
-HEARTS_RANK = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-DIAMONDS_RANK = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-SPADES_RANK = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-CLUBS_RANK = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 MAX_SCORE = 21
 
 def prompt(message)
@@ -12,7 +7,11 @@ def prompt(message)
 end
 
 def create_decK_cards
-  {'hearts' => HEARTS_RANK, 'diamonds' => DIAMONDS_RANK, 'spades' => SPADES_RANK, 'clubs' =>  CLUBS_RANK}
+  hearts_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+  diamonds_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+  spades_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+  clubs_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+  {'hearts' => hearts_rank, 'diamonds' => diamonds_rank, 'spades' => spades_rank, 'clubs' => clubs_rank}
 end
 
 def pick_card(dck)
@@ -73,14 +72,14 @@ end
 prompt("Welcome to the Twenty One Game, Dealing Cards....")
 prompt("\n")
 
-
+player_sum = 0
+dealer_sum = 0
 new_card = {}
 player_hand = []
 dealer_hand = []
-deck = create_decK_cards
-player_sum = 0
-dealer_sum = 0
-
+p deck = create_decK_cards
+play_again = ''
+game_over = 'false'
 loop do # main
   # initial deal:
     2.times do
@@ -95,9 +94,8 @@ loop do # main
     prompt("Dealer Hand:")
     display_card(dealer_hand, 'dealer')
     prompt("\n")
-
-answer = ''
-  loop do #Player turn:
+  answer = ''
+  while answer == '' || answer == 'h' do # Player turn
     player_sum = evaluate_hand(player_hand, 'player')
     if player_sum >= MAX_SCORE
       display_win_or_bust(player_sum, 'player')
@@ -109,26 +107,27 @@ answer = ''
       break if ['h', 's'].include?(answer)
       prompt("Incorrect Entry, please re-enter")
     end # check input/re-enter
-    break if answer == 's' || (answer == 'stay')
-    player_hand << pick_card(deck).to_a.flatten
-    delete_from_deck(deck, player_hand)
-    display_hand(player_hand, 'player')
-  end
+    if (answer == 'h') 
+      player_hand << pick_card(deck).to_a.flatten
+      delete_from_deck(deck, player_hand)
+      display_hand(player_hand, 'player')
+    end
+  end # Player turn
 
 ##player stay, compare player and dealer hands:
   dealer_sum = evaluate_hand(dealer_hand, 'dealer')
   if player_sum >= MAX_SCORE 
     # Player has won or busted, game over.
-    break
+    game_over = 'true'
   elsif (dealer_sum == MAX_SCORE) || (dealer_sum > player_sum)
     #check for dealer win with initial two cards then game over
     # Dealer cannot bust with 2 cards
     display_hand(dealer_hand, 'dealer')
     display_win_or_bust(dealer_sum, 'dealer')
-    break
+    game_over = 'true'
   end
 
-  loop do #Dealer turn:
+  while game_over == 'false' do  # Dealer turn
     puts "\n"
     prompt("Hit Dealer...")
     dealer_hand << pick_card(deck).to_a.flatten
@@ -137,10 +136,30 @@ answer = ''
     dealer_sum = evaluate_hand(dealer_hand, 'dealer')
     if dealer_sum >= MAX_SCORE || dealer_sum > player_sum
       display_win_or_bust(dealer_sum, 'dealer')
-      break
+      game_over = 'true'
     end
   end
-  break
-end # main
 prompt("Player sum = #{player_sum}, Dealer sum = #{dealer_sum}.")
-prompt("Goodbye!!")
+  
+  loop do
+    if game_over
+      prompt("Play again? (Y/N)")
+      play_again = gets.chomp.downcase
+      break if ['y', 'n'].include?(play_again)
+      prompt("Incorrect input please re-enter")
+    end
+  end
+  break if play_again == 'n'
+  # Re-initialize for new game:
+  system "clear"
+  player_sum = 0
+  dealer_sum = 0
+  new_card = {}
+  player_hand = []
+  dealer_hand = []
+  deck = {}  # delete old deck
+  deck = create_decK_cards # create new deck
+  play_again = ''
+  game_over = 'false'
+end # main
+prompt("Goodbye!! Thanks for playing.")
