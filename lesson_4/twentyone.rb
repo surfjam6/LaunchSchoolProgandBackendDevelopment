@@ -114,7 +114,7 @@ loop do # main
     # Player has won or busted, game over.
     game_over = 'true'
   elsif (dealer_sum == MAX_SCORE) || (dealer_sum > player_sum)
-    #check for dealer win with initial two cards then game over
+    # Check for dealer win with initial two cards => game over
     # Dealer cannot bust with 2 cards
     display_hand(dealer_hand, 'dealer')
     display_win_or_bust(dealer_sum, 'dealer')
@@ -133,7 +133,7 @@ loop do # main
       game_over = 'true'
     end
   end
-prompt("Player sum = #{player_sum}, Dealer sum = #{dealer_sum}.")
+  prompt("Player sum = #{player_sum}, Dealer sum = #{dealer_sum}.")
 
   loop do
     if game_over
