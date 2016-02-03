@@ -103,11 +103,10 @@ loop do # main
       break if ['h', 's'].include?(answer)
       prompt("Incorrect Entry, please re-enter")
     end # check input/re-enter
-    if answer == 'h'
-      player_hand << pick_card(deck).to_a.flatten
-      delete_from_deck(deck, player_hand)
-      display_hand(player_hand, 'player')
-    end
+    break if answer == 's'
+    player_hand << pick_card(deck).to_a.flatten
+    delete_from_deck(deck, player_hand)
+    display_hand(player_hand, 'player')
   end # Player turn
 
   dealer_sum = evaluate_hand(dealer_hand)
