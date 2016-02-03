@@ -65,12 +65,6 @@ def display_win_or_bust(card_total, user)
   end
 end
 
-def play_again
-  prompt("**********************************")
-  prompt("**********************************")
-  prompt("Play again? (Y/N)")
-  gets.chomp.downcase
-end
 prompt("Welcome to the Twenty One Game, Dealing Cards....")
 prompt("\n")
 
@@ -112,6 +106,7 @@ loop do # main
     break if answer == 's'
     player_hand << pick_card(deck).to_a.flatten
     delete_from_deck(deck, player_hand)
+    system "clear"
     display_hand(player_hand, 'player')
   end # Player turn
 
@@ -143,7 +138,10 @@ loop do # main
 
   loop do
     if game_over
-      play_again
+      prompt("**********************************")
+      prompt("**********************************")
+      prompt("Play again? (Y/N)")
+      play_again = gets.chomp.downcase
       break if ['y', 'n'].include?(play_again)
       prompt("Incorrect input please re-enter")
     else
