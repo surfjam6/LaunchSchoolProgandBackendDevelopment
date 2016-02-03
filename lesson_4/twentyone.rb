@@ -137,6 +137,8 @@ loop do # main
 
   loop do
     if game_over
+      prompt("**********************************")
+      prompt("**********************************")
       prompt("Play again? (Y/N)")
       play_again = gets.chomp.downcase
       break if ['y', 'n'].include?(play_again)
