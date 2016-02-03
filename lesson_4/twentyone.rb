@@ -36,9 +36,8 @@ def display_card(hand, user, sel=1)
   prompt("#{user.capitalize} hand is #{hand[sel]}")
 end
 
-def evaluate_hand(hand, user)
+def evaluate_hand(hand)
   sum_of_hand = 0
-  card = 0
   hand.each do |x|
     if x.last.include?('K') || x.last.include?('Q') || x.last.include?('J')
       card = 10
@@ -51,7 +50,7 @@ def evaluate_hand(hand, user)
     else
       card = x.last.to_i
     end
-    sum_of_hand = sum_of_hand + card
+    sum_of_hand += card
   end # each
   sum_of_hand
 end
@@ -79,21 +78,21 @@ play_again = ''
 game_over = 'false'
 loop do # main
   # initial deal:
-    2.times do
-      player_hand << pick_card(deck).to_a.flatten
-      delete_from_deck(deck, player_hand)
-      dealer_hand << pick_card(deck).to_a.flatten
-      delete_from_deck(deck, dealer_hand)
-    end
-    prompt("Player Hand:")
-    display_hand(player_hand, 'player')
-    prompt("\n")
-    prompt("Dealer Hand:")
-    display_card(dealer_hand, 'dealer')
-    prompt("\n")
+  2.times do
+    player_hand << pick_card(deck).to_a.flatten
+    delete_from_deck(deck, player_hand)
+    dealer_hand << pick_card(deck).to_a.flatten
+    delete_from_deck(deck, dealer_hand)
+  end
+  prompt("Player Hand:")
+  display_hand(player_hand, 'player')
+  prompt("\n")
+  prompt("Dealer Hand:")
+  display_card(dealer_hand, 'dealer')
+  prompt("\n")
   answer = ''
-  while answer == '' || answer == 'h' do # Player turn
-    player_sum = evaluate_hand(player_hand, 'player')
+  while answer == '' || answer == 'h' # Player turn
+    player_sum = evaluate_hand(player_hand)
     if player_sum >= MAX_SCORE
       display_win_or_bust(player_sum, 'player')
       break
@@ -104,16 +103,15 @@ loop do # main
       break if ['h', 's'].include?(answer)
       prompt("Incorrect Entry, please re-enter")
     end # check input/re-enter
-    if (answer == 'h') 
+    if answer == 'h'
       player_hand << pick_card(deck).to_a.flatten
       delete_from_deck(deck, player_hand)
       display_hand(player_hand, 'player')
     end
   end # Player turn
 
-##player stay, compare player and dealer hands:
-  dealer_sum = evaluate_hand(dealer_hand, 'dealer')
-  if player_sum >= MAX_SCORE 
+  dealer_sum = evaluate_hand(dealer_hand)
+  if player_sum >= MAX_SCORE
     # Player has won or busted, game over.
     game_over = 'true'
   elsif (dealer_sum == MAX_SCORE) || (dealer_sum > player_sum)
@@ -124,26 +122,28 @@ loop do # main
     game_over = 'true'
   end
 
-  while game_over == 'false' do  # Dealer turn
+  while game_over == 'false' # Dealer turn
     puts "\n"
     prompt("Hit Dealer...")
     dealer_hand << pick_card(deck).to_a.flatten
     delete_from_deck(deck, dealer_hand)
     display_hand(dealer_hand, 'dealer')
-    dealer_sum = evaluate_hand(dealer_hand, 'dealer')
+    dealer_sum = evaluate_hand(dealer_hand)
     if dealer_sum >= MAX_SCORE || dealer_sum > player_sum
       display_win_or_bust(dealer_sum, 'dealer')
       game_over = 'true'
     end
   end
 prompt("Player sum = #{player_sum}, Dealer sum = #{dealer_sum}.")
-  
+
   loop do
     if game_over
       prompt("Play again? (Y/N)")
       play_again = gets.chomp.downcase
       break if ['y', 'n'].include?(play_again)
       prompt("Incorrect input please re-enter")
+    else
+      break
     end
   end
   break if play_again == 'n'
@@ -154,7 +154,6 @@ prompt("Player sum = #{player_sum}, Dealer sum = #{dealer_sum}.")
   new_card = {}
   player_hand = []
   dealer_hand = []
-  deck = {}  # delete old deck
   deck = create_deck_cards # create new deck
   play_again = ''
   game_over = 'false'
