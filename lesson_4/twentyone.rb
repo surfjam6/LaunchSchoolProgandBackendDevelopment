@@ -1,31 +1,31 @@
 # twentyone.rb
-SUIT = ["hearts","diamonds", "clubs", "spades"]
+SUIT = ["hearts", "diamonds", "clubs", "spades"]
 MAX_SCORE = 21
 
 def prompt(message)
   puts "=> #{message}"
 end
 
-def create_decK_cards
+def create_deck_cards
   hearts_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
   diamonds_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
   spades_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
   clubs_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-  {'hearts' => hearts_rank, 'diamonds' => diamonds_rank, 'spades' => spades_rank, 'clubs' => clubs_rank}
+  { 'hearts' => hearts_rank, 'diamonds' => diamonds_rank, 'spades' => spades_rank, 'clubs' => clubs_rank }
 end
 
 def pick_card(dck)
-  random_suit = SUIT[rand(SUIT.length)]   
+  random_suit = SUIT[rand(SUIT.length)]
   random_rank = dck[random_suit][rand(dck[random_suit].length)]
-  {random_suit => random_rank}
+  { random_suit => random_rank }
 end
 
 def delete_from_deck(dck, hand)
   random_suit = hand.last[0]
   random_rank = hand.last[1]
-    if dck[random_suit].include?(random_rank)
-      dck[random_suit].delete(random_rank)
-    end
+  if dck[random_suit].include?(random_rank)
+    dck[random_suit].delete(random_rank)
+  end
 end
 
 def display_hand(hand, user)
@@ -33,27 +33,26 @@ def display_hand(hand, user)
 end
 
 def display_card(hand, user, sel=1)
-    prompt("#{user.capitalize} hand is #{hand[sel]}")
+  prompt("#{user.capitalize} hand is #{hand[sel]}")
 end
 
 def evaluate_hand(hand, user)
   sum_of_hand = 0
+  card = 0
   hand.each do |x|
     if x.last.include?('K') || x.last.include?('Q') || x.last.include?('J')
       card = 10
+    elsif x.last.include?('A')
+      if sum_of_hand <= 10
+        card = 11
+      else
+        card = 1
+      end
     else
       card = x.last.to_i
     end
-    if x.last.include?('A')
-      if sum_of_hand <= 10
-        sum_of_hand = sum_of_hand + 11
-      else
-        sum_of_hand = sum_of_hand + 1
-      end
-    else
-      sum_of_hand = sum_of_hand + card
-    end
-  end
+    sum_of_hand = sum_of_hand + card
+  end # each
   sum_of_hand
 end
 
@@ -66,9 +65,7 @@ def display_win_or_bust(card_total, user)
     prompt("#{user.capitalize} is winner! Game Over.")
   end
 end
-##
 
-##
 prompt("Welcome to the Twenty One Game, Dealing Cards....")
 prompt("\n")
 
@@ -77,7 +74,7 @@ dealer_sum = 0
 new_card = {}
 player_hand = []
 dealer_hand = []
-p deck = create_decK_cards
+deck = create_deck_cards
 play_again = ''
 game_over = 'false'
 loop do # main
@@ -158,7 +155,7 @@ prompt("Player sum = #{player_sum}, Dealer sum = #{dealer_sum}.")
   player_hand = []
   dealer_hand = []
   deck = {}  # delete old deck
-  deck = create_decK_cards # create new deck
+  deck = create_deck_cards # create new deck
   play_again = ''
   game_over = 'false'
 end # main
