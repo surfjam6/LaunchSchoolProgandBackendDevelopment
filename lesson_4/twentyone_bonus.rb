@@ -66,7 +66,7 @@ def display_win_or_bust(card_total, user)
   if card_total > MAX_SCORE
     prompt("#{user.capitalize} BUST! Game Over.")
   elsif card_total == MAX_SCORE
-    prompt("#{MAX_SCORE.uppercase}!! #{user.capitalize} has #{MAX_SCORE}!! Game Over.")
+    prompt("#{MAX_SCORE}!! #{user.capitalize} has #{MAX_SCORE}!! Game Over.")
   else
     prompt("****#{user.capitalize} is winner! Game Over.****")
   end
@@ -97,7 +97,8 @@ def reset_hand!
 end
 
 system "clear"
-prompt("Welcome to the Twenty One Game, first to #{MAX_SCORE} wins. Dealing Cards....")
+prompt("Welcome to the Twenty One Game, first to #{MAX_SCORE} wins a game.")
+prompt("First player to reach #{MAX_GAMES} games wins the match. Dealing Cards....")
 prompt("\n")
 answer = ''
 score_hand = reset_hand!
@@ -145,6 +146,7 @@ loop do # main
   if score_hand['player'] >= MAX_SCORE
     # Player has won or busted, game over.
     game_over = true
+    display_hand(dealer_hand, 'dealer')
   elsif (score_hand['dealer'] == MAX_SCORE) || (score_hand['dealer'] > score_hand['player'])
     # Check for dealer win with initial two cards => game over
     # Dealer cannot bust with 2 cards
