@@ -39,25 +39,26 @@ end
 
 def evaluate_hand(hand)
   sum_of_hand = 0
-  ace = false
+  ace_count = 0
   hand.each do |x|
     if x.last.include?('K') || x.last.include?('Q') || x.last.include?('J')
       card = 10
     elsif x.last.include?('A')
-      ace = true
-      if sum_of_hand <= 10
-        card = 11
-      else
-        card = 1
-      end
+      ace_count += 1
+      card = 11
     else
       card = x.last.to_i
     end
     sum_of_hand += card
   end # each
-  if sum_of_hand > MAX_SCORE && ace
-    sum_of_hand -= 10
-  end
+  loop do # ace handling
+    if sum_of_hand > MAX_SCORE && (ace_count > 0)
+        sum_of_hand -= 10
+        ace_count -= 1
+    else
+      break
+    end
+  end # ace handling
   sum_of_hand
 end
 
@@ -65,7 +66,7 @@ def display_win_or_bust(card_total, user)
   if card_total > MAX_SCORE
     prompt("#{user.capitalize} BUST! Game Over.")
   elsif card_total == MAX_SCORE
-    prompt("BLACKJACK!! #{user.capitalize} has #{MAX_SCORE}!! Game Over.")
+    prompt("#{MAX_SCORE.uppercase}!! #{user.capitalize} has #{MAX_SCORE}!! Game Over.")
   else
     prompt("****#{user.capitalize} is winner! Game Over.****")
   end
@@ -179,6 +180,7 @@ loop do # main
       prompt("**********************************")
       prompt("Hit any key to continue.")
       pause = gets.chomp
+      system "clear"
 
       if scoreboard['player'] == MAX_GAMES
         declare_winner('player')
