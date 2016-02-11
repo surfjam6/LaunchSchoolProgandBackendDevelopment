@@ -53,8 +53,8 @@ def evaluate_hand(hand)
   end # each
   loop do # ace handling
     if sum_of_hand > MAX_SCORE && (ace_count > 0)
-        sum_of_hand -= 10
-        ace_count -= 1
+      sum_of_hand -= 10
+      ace_count -= 1
     else
       break
     end
