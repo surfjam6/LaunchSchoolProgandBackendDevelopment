@@ -16,8 +16,8 @@ def create_deck_cards
 end
 
 def pick_card(dck)
-  random_suit = SUIT[rand(SUIT.length)]
-  random_rank = dck[random_suit][rand(dck[random_suit].length)]
+  random_suit = SUIT.sample
+  random_rank = dck[random_suit].shuffle.last
   { random_suit => random_rank }
 end
 
@@ -40,16 +40,16 @@ end
 def evaluate_hand(hand)
   sum_of_hand = 0
   ace_count = 0
-  hand.each do |x|
-    if x.last.include?('K') || x.last.include?('Q') || x.last.include?('J')
-      card = 10
+  hand.each do |card|
+    if card.last.include?('K') || card.last.include?('Q') || card.last.include?('J')
+      card_value = 10
     elsif x.last.include?('A')
       ace_count += 1
-      card = 11
+      card_value = 11
     else
-      card = x.last.to_i
+      card_value = card.last.to_i
     end
-    sum_of_hand += card
+    sum_of_hand += card_value
   end # each
   loop do # ace handling
     if sum_of_hand > MAX_SCORE && (ace_count > 0)
@@ -126,6 +126,7 @@ loop do # main
   prompt("\n")
   while answer == '' || answer == 'h' # Player turn
     score_hand['player'] = evaluate_hand(player_hand)
+    prompt("Player sum = #{score_hand['player']}")
     if score_hand['player'] >= MAX_SCORE
       display_win_or_bust(score_hand['player'], 'player')
       break
