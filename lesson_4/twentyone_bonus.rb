@@ -117,7 +117,11 @@ def display_welcome
   prompt("First player to reach #{MAX_GAMES} games wins the match. Dealing Cards....")
   prompt("\n")
 end
-
+def display_play_again_msg
+  prompt("**********************************")
+  prompt("**********************************")
+  prompt("Play again? (Y/N)")
+end
 def hit(deck, user_hand)
     user_hand << pick_card(deck).to_a.flatten
     delete_from_deck(deck, user_hand)
@@ -208,9 +212,7 @@ loop do # main
   end
   loop do # play again loop
     if match_over
-      prompt("**********************************")
-      prompt("**********************************")
-      prompt("Play again? (Y/N)")
+      display_play_again_msg
       play_again = gets.chomp.downcase
       break if ['y', 'n'].include?(play_again)
       prompt("Incorrect input please re-enter")
