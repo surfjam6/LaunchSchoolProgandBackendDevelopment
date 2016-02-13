@@ -118,6 +118,11 @@ def display_welcome
   prompt("\n")
 end
 
+def hit(deck, user_hand)
+    user_hand << pick_card(deck).to_a.flatten
+    delete_from_deck(deck, user_hand)
+end
+
 display_welcome
 scoreboard = reset_scoreboard!
 loop do # main
@@ -133,10 +138,8 @@ loop do # main
   
   # initial deal:
   2.times do
-    player_hand << pick_card(deck).to_a.flatten
-    delete_from_deck(deck, player_hand)
-    dealer_hand << pick_card(deck).to_a.flatten
-    delete_from_deck(deck, dealer_hand)
+    hit(deck, player_hand)
+    hit(deck, dealer_hand)
   end
   prompt("Player Hand:")
   display_hand(player_hand, 'player')
@@ -158,8 +161,7 @@ loop do # main
       prompt("Incorrect Entry, please re-enter")
     end # check input/re-enter
     break if answer == 's'
-    player_hand << pick_card(deck).to_a.flatten
-    delete_from_deck(deck, player_hand)
+    hit(deck, player_hand)
     display_hand(player_hand, 'player')
   end # Player turn
   score_hand['player'] = evaluate_hand(player_hand)
@@ -179,8 +181,7 @@ loop do # main
   while !game_over # Dealer turn
     puts "\n"
     prompt("Hit Dealer...")
-    dealer_hand << pick_card(deck).to_a.flatten
-    delete_from_deck(deck, dealer_hand)
+    hit(deck, dealer_hand)
     display_hand(dealer_hand, 'dealer')
     score_hand["dealer"] = evaluate_hand(dealer_hand)
     if score_hand['dealer'] >= MAX_SCORE || score_hand['dealer'] > score_hand['player']
