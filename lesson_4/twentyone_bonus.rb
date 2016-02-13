@@ -8,24 +8,21 @@ def prompt(message)
 end
 
 def create_deck_cards
-  hearts_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-  diamonds_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-  spades_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-  clubs_rank = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-  { 'hearts' => hearts_rank, 'diamonds' => diamonds_rank, 'spades' => spades_rank, 'clubs' => clubs_rank }
+  ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+  { 'hearts' => ranks, 'diamonds' => ranks.dup, 'spades' => ranks.dup, 'clubs' => ranks.dup }
 end
 
-def pick_card(dck)
+def pick_card(deck)
   random_suit = SUIT.sample
-  random_rank = dck[random_suit].shuffle.last
+  random_rank = deck[random_suit].shuffle.last
   { random_suit => random_rank }
 end
 
-def delete_from_deck(dck, hand)
+def delete_from_deck(deck, hand)
   random_suit = hand.last[0]
   random_rank = hand.last[1]
-  if dck[random_suit].include?(random_rank)
-    dck[random_suit].delete(random_rank)
+  if deck[random_suit].include?(random_rank)
+    deck[random_suit].delete(random_rank)
   end
 end
 
@@ -41,23 +38,22 @@ def evaluate_hand(hand)
   sum_of_hand = 0
   ace_count = 0
   hand.each do |card|
-    if card.last.include?('K') || card.last.include?('Q') || card.last.include?('J')
-      card_value = 10
-    elsif x.last.include?('A')
-      ace_count += 1
-      card_value = 11
-    else
-      card_value = card.last.to_i
-    end
+    card_rank = card.last
+    card_value = case card_rank
+                when 'K', 'Q','J'
+                  10
+                when 'A'
+                  ace_count += 1
+                  11
+                else
+                  card.last.to_i
+                end
     sum_of_hand += card_value
   end # each
   loop do # ace handling
-    if sum_of_hand > MAX_SCORE && (ace_count > 0)
-      sum_of_hand -= 10
-      ace_count -= 1
-    else
-      break
-    end
+    break unless sum_of_hand > MAX_SCORE && (ace_count > 0)
+    sum_of_hand -= 10
+    ace_count -= 1
   end # ace handling
   sum_of_hand
 end
@@ -96,7 +92,7 @@ def reset_hand!
   { "player" => 0, "dealer" => 0 }
 end
 
-system "clear"
+system 'clear' or system 'cls'
 prompt("Welcome to the Twenty One Game, first to #{MAX_SCORE} wins a game.")
 prompt("First player to reach #{MAX_GAMES} games wins the match. Dealing Cards....")
 prompt("\n")
@@ -183,8 +179,7 @@ loop do # main
       prompt("**********************************")
       prompt("Hit any key to continue.")
       pause = gets.chomp
-      system "clear"
-
+      system "clear" or system 'cls'
       if scoreboard['player'] == MAX_GAMES
         declare_winner('player')
         match_over = true
