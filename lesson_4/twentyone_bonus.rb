@@ -96,17 +96,17 @@ system 'clear' or system 'cls'
 prompt("Welcome to the Twenty One Game, first to #{MAX_SCORE} wins a game.")
 prompt("First player to reach #{MAX_GAMES} games wins the match. Dealing Cards....")
 prompt("\n")
-answer = ''
-score_hand = reset_hand!
-new_card = {}
-player_hand = []
-dealer_hand = []
-deck = create_deck_cards
-play_again = ''
-game_over = false
-match_over = false
 scoreboard = reset_scoreboard!
 loop do # main
+  answer = ''
+  score_hand = reset_hand!
+  new_card = {}
+  player_hand = []
+  dealer_hand = []
+  deck = create_deck_cards
+  play_again = ''
+  game_over = false
+  match_over = false
   # initial deal:
   2.times do
     player_hand << pick_card(deck).to_a.flatten
@@ -178,7 +178,7 @@ loop do # main
       prompt("**********************************")
       prompt("**********************************")
       prompt("Hit any key to continue.")
-      pause = gets.chomp
+      gets.chomp
       system "clear" or system 'cls'
       if scoreboard['player'] == MAX_GAMES
         declare_winner('player')
@@ -206,15 +206,5 @@ loop do # main
   if match_over
     scoreboard = reset_scoreboard!
   end
-  # Re-initialize for new game:
-  answer = ''
-  score_hand = reset_hand!
-  new_card = {}
-  player_hand = []
-  dealer_hand = []
-  deck = create_deck_cards # create new deck
-  play_again = ''
-  game_over = false
-  match_over = false
 end # main
 prompt("Goodbye!! Thanks for playing.")
