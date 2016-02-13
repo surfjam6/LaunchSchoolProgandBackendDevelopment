@@ -111,10 +111,14 @@ def reset_hand!
   { "player" => 0, "dealer" => 0 }
 end
 
-system 'clear' or system 'cls'
-prompt("Welcome to the Twenty One Game, first to #{MAX_SCORE} wins a game.")
-prompt("First player to reach #{MAX_GAMES} games wins the match. Dealing Cards....")
-prompt("\n")
+def display_welcome
+  system 'clear' or system 'cls'
+  prompt("Welcome to the Twenty One Game, first to #{MAX_SCORE} wins a game.")
+  prompt("First player to reach #{MAX_GAMES} games wins the match. Dealing Cards....")
+  prompt("\n")
+end
+
+display_welcome
 scoreboard = reset_scoreboard!
 loop do # main
   answer = ''
@@ -126,6 +130,7 @@ loop do # main
   play_again = ''
   game_over = false
   match_over = false
+  
   # initial deal:
   2.times do
     player_hand << pick_card(deck).to_a.flatten
