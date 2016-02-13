@@ -166,29 +166,26 @@ loop do # main
   end
   prompt("Player sum = #{score_hand['player']}, Dealer sum = #{score_hand['dealer']}.")
 
-  loop do # game over? loop
-    if game_over
-      if player_win?(score_hand)
-        increment_score!(scoreboard, 'player')
-      else
-        increment_score!(scoreboard, 'dealer')
-      end
-      prompt("**********************************")
-      prompt("Player Total = #{scoreboard['player']}, Dealer Total = #{scoreboard['dealer']}.")
-      prompt("**********************************")
-      prompt("**********************************")
-      prompt("Hit any key to continue.")
-      gets.chomp
-      system "clear" or system 'cls'
-      if scoreboard['player'] == MAX_GAMES
-        declare_winner('player')
-        match_over = true
-      elsif scoreboard['dealer'] == MAX_GAMES
-        declare_winner('dealer')
-        match_over = true
-      end
+  if game_over
+    if player_win?(score_hand)
+      increment_score!(scoreboard, 'player')
+    else
+      increment_score!(scoreboard, 'dealer')
     end
-    break
+    prompt("**********************************")
+    prompt("Player Total = #{scoreboard['player']}, Dealer Total = #{scoreboard['dealer']}.")
+    prompt("**********************************")
+    prompt("**********************************")
+    prompt("Hit any key to continue.")
+    gets.chomp
+    system "clear" or system 'cls'
+    if scoreboard['player'] == MAX_GAMES
+      declare_winner('player')
+      match_over = true
+    elsif scoreboard['dealer'] == MAX_GAMES
+      declare_winner('dealer')
+      match_over = true
+    end
   end
   loop do # play again loop
     if match_over
