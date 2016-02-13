@@ -68,12 +68,21 @@ def display_win_or_bust(card_total, user)
   end
 end
 
+def has_max_score?(score)
+  score == MAX_SCORE
+end
+
+def bust?(score)
+  score > MAX_SCORE
+end
+
 def player_win?(score_hand)
-  if score_hand['player'] == MAX_SCORE || score_hand['dealer'] > MAX_SCORE || ((score_hand['player'] > score_hand['dealer']) && !(score_hand['player'] > MAX_SCORE))
-    true
-  else
-    false
-  end
+  dealer_score = score_hand['dealer']
+  player_score = score_hand['player']
+  
+  has_max_score?(player_score) ||
+  bust?(dealer_score)   ||
+  (player_score > dealer_score && !bust?(player_score))
 end
 
 def declare_winner(user)
@@ -86,6 +95,16 @@ end
 
 def reset_scoreboard!
   { "player" => 0, "dealer" => 0 }
+end
+
+def display_scoreboard(scorebd)
+    prompt("**********************************")
+    prompt("Player Total = #{scorebd['player']}, Dealer Total = #{scorebd['dealer']}.")
+    prompt("**********************************")
+    prompt("**********************************")
+    prompt("Hit any key to continue.")
+    gets.chomp
+    system "clear" or system 'cls'
 end
 
 def reset_hand!
@@ -172,13 +191,7 @@ loop do # main
     else
       increment_score!(scoreboard, 'dealer')
     end
-    prompt("**********************************")
-    prompt("Player Total = #{scoreboard['player']}, Dealer Total = #{scoreboard['dealer']}.")
-    prompt("**********************************")
-    prompt("**********************************")
-    prompt("Hit any key to continue.")
-    gets.chomp
-    system "clear" or system 'cls'
+    display_scoreboard(scoreboard)
     if scoreboard['player'] == MAX_GAMES
       declare_winner('player')
       match_over = true
