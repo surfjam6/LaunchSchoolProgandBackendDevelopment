@@ -40,14 +40,14 @@ def evaluate_hand(hand)
   hand.each do |card|
     card_rank = card.last
     card_value = case card_rank
-                when 'K', 'Q','J'
-                  10
-                when 'A'
-                  ace_count += 1
-                  11
-                else
-                  card.last.to_i
-                end
+                 when 'K', 'Q', 'J'
+                   10
+                 when 'A'
+                   ace_count += 1
+                   11
+                 else
+                   card.last.to_i
+                 end
     sum_of_hand += card_value
   end # each
   loop do # ace handling
@@ -68,7 +68,7 @@ def display_win_or_bust(card_total, user)
   end
 end
 
-def has_max_score?(score)
+def max_score?(score)
   score == MAX_SCORE
 end
 
@@ -79,10 +79,8 @@ end
 def player_win?(score_hand)
   dealer_score = score_hand['dealer']
   player_score = score_hand['player']
-  
-  has_max_score?(player_score) ||
-  bust?(dealer_score)   ||
-  (player_score > dealer_score && !bust?(player_score))
+
+  max_score?(player_score) || bust?(dealer_score) || (player_score > dealer_score && !bust?(player_score))
 end
 
 def declare_winner(user)
@@ -98,13 +96,13 @@ def reset_scoreboard!
 end
 
 def display_scoreboard(scorebd)
-    prompt("**********************************")
-    prompt("Player Total = #{scorebd['player']}, Dealer Total = #{scorebd['dealer']}.")
-    prompt("**********************************")
-    prompt("**********************************")
-    prompt("Hit any key to continue.")
-    gets.chomp
-    system "clear" or system 'cls'
+  prompt("**********************************")
+  prompt("Player Total = #{scorebd['player']}, Dealer Total = #{scorebd['dealer']}.")
+  prompt("**********************************")
+  prompt("**********************************")
+  prompt("Hit any key to continue.")
+  gets.chomp
+  system "clear" or system 'cls'
 end
 
 def reset_hand!
@@ -117,14 +115,16 @@ def display_welcome
   prompt("First player to reach #{MAX_GAMES} games wins the match. Dealing Cards....")
   prompt("\n")
 end
+
 def display_play_again_msg
   prompt("**********************************")
   prompt("**********************************")
   prompt("Play again? (Y/N)")
 end
+
 def hit(deck, user_hand)
-    user_hand << pick_card(deck).to_a.flatten
-    delete_from_deck(deck, user_hand)
+  user_hand << pick_card(deck).to_a.flatten
+  delete_from_deck(deck, user_hand)
 end
 
 display_welcome
@@ -132,14 +132,13 @@ scoreboard = reset_scoreboard!
 loop do # main
   answer = ''
   score_hand = reset_hand!
-  new_card = {}
   player_hand = []
   dealer_hand = []
   deck = create_deck_cards
   play_again = ''
   game_over = false
   match_over = false
-  
+
   # initial deal:
   2.times do
     hit(deck, player_hand)
